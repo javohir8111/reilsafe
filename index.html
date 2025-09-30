@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainSafe - Bosh Sahifa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #60d1decb;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            overflow: hidden;
+        }
+        
+        .marker-container {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .marker {
+            width: 18px;
+            height: 18px;
+            background: #ff4444;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin: 0 auto;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .marker:hover {
+            background: #ffeb3b;
+            transform: scale(1.2);
+        }
+        
+        .marker-label {
+            font-size: 12px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3px 6px;
+            border-radius: 5px;
+            margin-top: 5px;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+        
+        .search-box {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(7, 179, 242, 0.5);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            z-index: 1;
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 5px;
+            background: url('assets/lang-bg.png') no-repeat center/cover;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/railsafe.png" alt="TrainSafe Logo" class="logo">
+            <img src="assets/iconr.png" alt="Partner Logo 1" class="logo">
+            <img src="assets/tstu.png" alt="Partner Logo 2" class="logo">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="uz">UZB</button>
+                <button class="lang-btn" data-lang="ru">RUS</button>
+                <button class="lang-btn" data-lang="en">ENG</button>
+            </div>
+            <a href="profil.html" class="text-white text-decoration-none ms-3"><span class="user-icon">👤</span> <span id="username">IRGASHEV N.N</span></a>
+            <a href="note.html" class="text-white ms-4 fs-4 text-decoration-none">🔔</a>
+        </div>
+    </header>
+
+    <div class="map-container">
+        <div class="search-box">
+            <input type="text" id="station-filter" class="form-control" placeholder="Stansiyani qidirish..." list="station-list" oninput="filterStations(this.value)">
+        </div>
+
+        <datalist id="station-list">
+            <option value="Блок-Пост-Каттакурган">
+            <option value="Каттакурган-Рзд№28">
+            <option value="Нурбулак-Блок-пост">
+            <option value="Рзд№24-Нурбулак">
+            <option value="Янгийўл-Пахта">
+            <option value="Пахта-Алмазар">
+            <option value="Ташкент">
+            <option value="Самарканд">
+            <option value="Бухара">
+            <option value="Навои">
+            <option value="Джизак">
+            <option value="Гулистан">
+            <option value="Кунград">
+            <option value="Ургенч">
+            <option value="Андижан">
+            <option value="Фергана">
+            <option value="Термез">
+            <option value="Карши">
+            <option value="Нукус">
+            <option value="Хива">
+        </datalist>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        const translations = {
+            uz: {
+                title: "TrainSafe - Bosh Sahifa",
+                search_placeholder: "Stansiyani qidirish...",
+                popup_safety_point: "Temiryol xavfsizligi nuqtasi",
+                stations: {
+                    "blok-post-kattakurgan": {
+                        name: "Blok-Post-Kattakurgan",
+                        description: "Kattakurgan blok-posti, Samarqand viloyati"
+                    },
+                    "kattakurgan-rzd28": {
+                        name: "Kattakurgan-Rzd№28",
+                        description: "Raz'ezd №28 Kattakurgan yaqinida, Samarqand viloyati"
+                    },
+                    "nurbulak-blok-post": {
+                        name: "Nurbulak-Blok-post",
+                        description: "Nurbulak blok-posti, Nurobod tumani"
+                    },
+                    "rzd24-nurbulak": {
+                        name: "Rzd№24-Nurbulak",
+                        description: "Raz'ezd №24 Nurbulak yaqinida, Pastdarg'om tumani"
+                    },
+                    "yangiyul-paxta": {
+                        name: "Yangiyul-Paxta",
+                        description: "Paxta stansiyasi (Yangiyul-Paxta bo'limi), Toshkent viloyati"
+                    },
+                    "paxta-almazor": {
+                        name: "Paxta-Almazor",
+                        description: "Almazor stansiyasi (Paxta-Almazor bo'limi), Toshkent viloyati"
+                    },
+                    "tashkent": {
+                        name: "Toshkent",
+                        description: "Toshkent temir yo'l stansiyasi, Toshkent shahri"
+                    },
+                    "samarkand": {
+                        name: "Samarqand",
+                        description: "Samarqand temir yo'l stansiyasi, Samarqand viloyati"
+                    },
+                    "bukhara": {
+                        name: "Buxoro",
+                        description: "Buxoro temir yo'l stansiyasi, Buxoro viloyati"
+                    },
+                    "navoi": {
+                        name: "Navoiy",
+                        description: "Navoiy temir yo'l stansiyasi, Navoiy viloyati"
+                    },
+                    "jizzak": {
+                        name: "Jizzax",
+                        description: "Jizzax temir yo'l stansiyasi, Jizzax viloyati"
+                    },
+                    "gulistan": {
+                        name: "Guliston",
+                        description: "Guliston temir yo'l stansiyasi, Sirdaryo viloyati"
+                    },
+                    "kungrad": {
+                        name: "Kungrad",
+                        description: "Kungrad temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi"
+                    },
+                    "urgench": {
+                        name: "Urganch",
+                        description: "Urganch temir yo'l stansiyasi, Xorazm viloyati"
+                    },
+                    "andijan": {
+                        name: "Andijon",
+                        description: "Andijon temir yo'l stansiyasi, Andijon viloyati"
+                    },
+                    "fergana": {
+                        name: "Farg'ona",
+                        description: "Farg'ona temir yo'l stansiyasi, Farg'ona viloyati"
+                    },
+                    "termez": {
+                        name: "Termiz",
+                        description: "Termiz temir yo'l stansiyasi, Surxondaryo viloyati"
+                    },
+                    "karshi": {
+                        name: "Qarshi",
+                        description: "Qarshi temir yo'l stansiyasi, Qashqadaryo viloyati"
+                    },
+                    "nukus": {
+                        name: "Nukus",
+                        description: "Nukus temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi"
+                    },
+                    "xiva": {
+                        name: "Xiva",
+                        description: "Xiva temir yo'l stansiyasi, Xorazm viloyati"
+                    }
+                }
+            },
+            ru: {
+                title: "TrainSafe - Главная страница",
+                search_placeholder: "Поиск станции...",
+                popup_safety_point: "Пункт безопасности железной дороги",
+                stations: {
+                    "blok-post-kattakurgan": {
+                        name: "Блок-Пост-Каттакурган",
+                        description: "Блок-пост Каттакурган, Самаркандская область"
+                    },
+                    "kattakurgan-rzd28": {
+                        name: "Каттакурган-Рзд№28",
+                        description: "Разъезд №28 рядом с Каттакурганом, Самаркандская область"
+                    },
+                    "nurbulak-blok-post": {
+                        name: "Нурбулак-Блок-пост",
+                        description: "Блок-пост Нурбулак, Нурабадский район"
+                    },
+                    "rzd24-nurbulak": {
+                        name: "Рзд№24-Нурбулак",
+                        description: "Разъезд №24 рядом с Нурбулаком, Пастдаргомский район"
+                    },
+                    "yangiyul-paxta": {
+                        name: "Янгийул-Пахта",
+                        description: "Станция Пахта (участок Янгийул-Пахта), Ташкентская область"
+                    },
+                    "paxta-almazor": {
+                        name: "Пахта-Алмазар",
+                        description: "Станция Алмазар (участок Пахта-Алмазар), Ташкентская область"
+                    },
+                    "tashkent": {
+                        name: "Ташкент",
+                        description: "Железнодорожная станция Ташкент, город Ташкент"
+                    },
+                    "samarkand": {
+                        name: "Самарканд",
+                        description: "Железнодорожная станция Самарканд, Самаркандская область"
+                    },
+                    "bukhara": {
+                        name: "Бухара",
+                        description: "Железнодорожная станция Бухара, Бухарская область"
+                    },
+                    "navoi": {
+                        name: "Навои",
+                        description: "Железнодорожная станция Навои, Навоийская область"
+                    },
+                    "jizzak": {
+                        name: "Джизак",
+                        description: "Железнодорожная станция Джизак, Джизакская область"
+                    },
+                    "gulistan": {
+                        name: "Гулистан",
+                        description: "Железнодорожная станция Гулистан, Сырдарьинская область"
+                    },
+                    "kungrad": {
+                        name: "Кунград",
+                        description: "Железнодорожная станция Кунград, Республика Каракалпакстан"
+                    },
+                    "urgench": {
+                        name: "Ургенч",
+                        description: "Железнодорожная станция Ургенч, Хорезмская область"
+                    },
+                    "andijan": {
+                        name: "Андижан",
+                        description: "Железнодорожная станция Андижан, Андижанская область"
+                    },
+                    "fergana": {
+                        name: "Фергана",
+                        description: "Железнодорожная станция Фергана, Ферганская область"
+                    },
+                    "termez": {
+                        name: "Термез",
+                        description: "Железнодорожная станция Термез, Сурхандарьинская область"
+                    },
+                    "karshi": {
+                        name: "Карши",
+                        description: "Железнодорожная станция Карши, Кашкадарьинская область"
+                    },
+                    "nukus": {
+                        name: "Нукус",
+                        description: "Железнодорожная станция Нукус, Республика Каракалпакстан"
+                    },
+                    "xiva": {
+                        name: "Хива",
+                        description: "Железнодорожная станция Хива, Хорезмская область"
+                    }
+                }
+            },
+            en: {
+                title: "TrainSafe - Home Page",
+                search_placeholder: "Search for a station...",
+                popup_safety_point: "Railway Safety Point",
+                stations: {
+                    "blok-post-kattakurgan": {
+                        name: "Block-Post-Kattakurgan",
+                        description: "Kattakurgan block-post, Samarkand region"
+                    },
+                    "kattakurgan-rzd28": {
+                        name: "Kattakurgan-Rzd№28",
+                        description: "Raz'ezd №28 near Kattakurgan, Samarkand region"
+                    },
+                    "nurbulak-blok-post": {
+                        name: "Nurbulak-Block-post",
+                        description: "Nurbulak block-post, Nurobod district"
+                    },
+                    "rzd24-nurbulak": {
+                        name: "Rzd№24-Nurbulak",
+                        description: "Raz'ezd №24 near Nurbulak, Pastdargom district"
+                    },
+                    "yangiyul-paxta": {
+                        name: "Yangiyul-Paxta",
+                        description: "Paxta station (Yangiyul-Paxta section), Tashkent region"
+                    },
+                    "paxta-almazor": {
+                        name: "Paxta-Almazar",
+                        description: "Almazar station (Paxta-Almazar section), Tashkent region"
+                    },
+                    "tashkent": {
+                        name: "Tashkent",
+                        description: "Tashkent railway station, Tashkent city"
+                    },
+                    "samarkand": {
+                        name: "Samarkand",
+                        description: "Samarkand railway station, Samarkand region"
+                    },
+                    "bukhara": {
+                        name: "Bukhara",
+                        description: "Bukhara railway station, Bukhara region"
+                    },
+                    "navoi": {
+                        name: "Navoi",
+                        description: "Navoi railway station, Navoi region"
+                    },
+                    "jizzak": {
+                        name: "Jizzak",
+                        description: "Jizzak railway station, Jizzak region"
+                    },
+                    "gulistan": {
+                        name: "Gulistan",
+                        description: "Gulistan railway station, Sirdaryo region"
+                    },
+                    "kungrad": {
+                        name: "Kungrad",
+                        description: "Kungrad railway station, Republic of Karakalpakstan"
+                    },
+                    "urgench": {
+                        name: "Urgench",
+                        description: "Urgench railway station, Khorezm region"
+                    },
+                    "andijan": {
+                        name: "Andijan",
+                        description: "Andijan railway station, Andijan region"
+                    },
+                    "fergana": {
+                        name: "Fergana",
+                        description: "Fergana railway station, Fergana region"
+                    },
+                    "termez": {
+                        name: "Termez",
+                        description: "Termez railway station, Surkhandarya region"
+                    },
+                    "karshi": {
+                        name: "Karshi",
+                        description: "Karshi railway station, Kashkadarya region"
+                    },
+                    "nukus": {
+                        name: "Nukus",
+                        description: "Nukus railway station, Republic of Karakalpakstan"
+                    },
+                    "xiva": {
+                        name: "Khiva",
+                        description: "Khiva railway station, Khorezm region"
+                    }
+                }
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'uz';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.querySelector('#station-filter').placeholder = translations[lang].search_placeholder;
+            updateMapMarkers();
+        }
+
+        function updateMapMarkers() {
+            markers.forEach(marker => {
+                const station = stations.find(s => s.id === marker.stationId);
+                marker.bindPopup(`
+                    <div style="text-align: center; font-weight: bold; color: #003087;">
+                        <h3>${translations[currentLang].stations[station.id].name}</h3>
+                        <p>${translations[currentLang].stations[station.id].description}</p>
+                        <small>${translations[currentLang].popup_safety_point}</small>
+                    </div>
+                `);
+                marker.stationName = translations[currentLang].stations[station.id].name;
+            });
+        }
+
+        var map = L.map('map').setView([41.0, 65.0], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var stations = [{
+            id: "blok-post-kattakurgan",
+            coords: [39.9024, 66.2457]
+        }, {
+            id: "kattakurgan-rzd28",
+            coords: [39.8800, 66.2800]
+        }, {
+            id: "nurbulak-blok-post",
+            coords: [39.8500, 66.4068]
+        }, {
+            id: "rzd24-nurbulak",
+            coords: [39.7000, 66.8000]
+        }, {
+            id: "yangiyul-paxta",
+            coords: [41.0139, 68.9449]
+        }, {
+            id: "paxta-almazor",
+            coords: [40.9621, 68.8583]
+        }, {
+            id: "tashkent",
+            coords: [41.3111, 69.2406]
+        }, {
+            id: "samarkand",
+            coords: [39.6825, 66.9286]
+        }, {
+            id: "bukhara",
+            coords: [39.7164, 64.5511]
+        }, {
+            id: "navoi",
+            coords: [40.1, 65.3667]
+        }, {
+            id: "jizzak",
+            coords: [40.133, 67.833]
+        }, {
+            id: "gulistan",
+            coords: [40.4915, 68.7811]
+        }, {
+            id: "kungrad",
+            coords: [43.0425, 58.8503]
+        }, {
+            id: "urgench",
+            coords: [41.55, 60.6333]
+        }, {
+            id: "andijan",
+            coords: [40.7821, 72.3442]
+        }, {
+            id: "fergana",
+            coords: [40.3844, 71.7864]
+        }, {
+            id: "termez",
+            coords: [37.2611, 67.3086]
+        }, {
+            id: "karshi",
+            coords: [38.8667, 65.8]
+        }, {
+            id: "nukus",
+            coords: [42.4531, 59.6103]
+        }, {
+            id: "xiva",
+            coords: [41.3833, 60.35]
+        }];
+
+        var markers = [];
+        stations.forEach(function(station) {
+            var marker = L.marker(station.coords).addTo(map);
+            marker.stationId = station.id;
+            marker.stationName = translations[currentLang].stations[station.id].name;
+            marker.bindPopup(`
+                <div style="text-align: center; font-weight: bold; color: #003087;">
+                    <h3>${translations[currentLang].stations[station.id].name}</h3>
+                    <p>${translations[currentLang].stations[station.id].description}</p>
+                    <small>${translations[currentLang].popup_safety_point}</small>
+                </div>
+            `);
+            marker.on('click', function() {
+                window.location.href = `stations.html?id=${station.id}`;
+            });
+            markers.push(marker);
+        });
+
+        if (markers.length > 0) {
+            var group = new L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.1));
+        }
+
+        function filterStations(query) {
+            markers.forEach(function(marker) {
+                const name = marker.stationName.toLowerCase();
+                if (name.includes(query.toLowerCase()) || !query) {
+                    marker.addTo(map);
+                } else {
+                    map.removeLayer(marker);
+                }
+            });
+        }
+
+        function initializePage() {
+            setLanguage(currentLang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>

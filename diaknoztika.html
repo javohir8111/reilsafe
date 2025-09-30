@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainSafe - Diaknostika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #60d1decb;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .status-badge.normal,
+        .status-badge.stabil {
+            color: #198754;
+        }
+        
+        .status-badge.warning {
+            color: #ffc107;
+        }
+        
+        .status-badge.alarm {
+            color: #dc3545;
+        }
+        
+        .log-icon {
+            margin-right: 8px;
+        }
+        
+        .back-btn {
+            margin: 15px;
+        }
+        
+        .list-group-item {
+            font-size: 14px;
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 5px;
+            background: url('assets/lang-bg.png') no-repeat center/cover;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/railsafe.png" alt="TrainSafe Logo" class="logo">
+            <img src="assets/iconr.png" alt="Partner Logo 1" class="logo">
+            <img src="assets/tstu.png" alt="Partner Logo 2" class="logo">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="uz">UZB</button>
+                <button class="lang-btn" data-lang="ru">RUS</button>
+                <button class="lang-btn" data-lang="en">ENG</button>
+            </div>
+            <a href="profil.html" class="text-white text-decoration-none ms-3"><span class="user-icon">👤</span> <span id="username">IRGASHEV N.N</span></a>
+            <a href="note.html" class="text-white ms-4 fs-4 text-decoration-none">🔔</a>
+        </div>
+    </header>
+
+    <div class="d-flex justify-content-start">
+        <button class="btn btn-outline-secondary back-btn" onclick="window.location='stations.html'" id="back-btn">Orqaga</button>
+    </div>
+
+    <main class="container mt-3">
+        <h2 class="text-center" id="diagnostics-title">Diaknostika Holati</h2>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="left-device-title">Chap Tamon Qurilmasi</h5>
+                        <p id="leftStatus" class="mb-2">Holati: <strong>Yuklanmoqda...</strong></p>
+                        <p id="leftTemp" class="mb-2">Harorat: <strong>Yuklanmoqda...</strong></p>
+                        <p id="leftPassed" class="mb-3">O'tgan Poyezdlar: <strong>Yuklanmoqda...</strong></p>
+                        <h6 class="mb-2" id="left-log-title">Voqealar Logi</h6>
+                        <ul id="leftLog" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="right-device-title">O'ng Tamon Qurilmasi</h5>
+                        <p id="rightStatus" class="mb-2">Holati: <strong>Yuklanmoqda...</strong></p>
+                        <p id="rightTemp" class="mb-2">Harorat: <strong>Yuklanmoqda...</strong></p>
+                        <p id="rightPassed" class="mb-3">O'tgan Poyezdlar: <strong>Yuklanmoqda...</strong></p>
+                        <h6 class="mb-2" id="right-log-title">Voqealar Logi</h6>
+                        <ul id="rightLog" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title" id="system-title">Umumiy Tizim Holati</h5>
+                <p id="systemStatus" class="mb-2">Tizim Holati: <strong>Yuklanmoqda...</strong></p>
+                <p id="lastCheck" class="mb-2">Oxirgi Tekshiruv: <strong>Yuklanmoqda...</strong></p>
+                <p id="uptime" class="mb-0">Ish Vaqti: <strong>Yuklanmoqda...</strong></p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const translations = {
+            uz: {
+                title: "TrainSafe - Diaknostika",
+                back_btn: "Orqaga",
+                diagnostics_title: "Diaknostika Holati",
+                left_device_title: "Chap Tamon Qurilmasi",
+                right_device_title: "O'ng Tamon Qurilmasi",
+                left_log_title: "Voqealar Logi",
+                right_log_title: "Voqealar Logi",
+                system_title: "Umumiy Tizim Holati",
+                status_label: "Holati:",
+                temp_label: "Harorat:",
+                trains_passed_label: "O'tgan Poyezdlar:", // Updated
+                system_status_label: "Tizim Holati:",
+                last_check_label: "Oxirgi Tekshiruv:",
+                uptime_label: "Ish Vaqti:",
+                loading: "Yuklanmoqda...",
+                status: {
+                    normal: "Normal",
+                    stabil: "Stabil",
+                    warning: "Ogohlantirish",
+                    alarm: "Xavf"
+                },
+                logs: {
+                    connected: "Aloqa tiklandi",
+                    disconnected: "Aloqa yo'qoldi",
+                    sensor_updated: "Sensor yangilandi",
+                    temp_rise: "Harorat oshishi aniqlandi",
+                    balance_issue: "Balans buzilishi",
+                    device_restarted: "Qurilma qayta yuklandi"
+                },
+                units: {
+                    temp: "°C",
+                    passed: "ta", // Kept as is, as it fits for "trains"
+                    uptime: "soat"
+                }
+            },
+            ru: {
+                title: "TrainSafe - Диагностика",
+                back_btn: "Назад",
+                diagnostics_title: "Состояние диагностики",
+                left_device_title: "Левое устройство рельса",
+                right_device_title: "Правое устройство рельса",
+                left_log_title: "Журнал событий",
+                right_log_title: "Журнал событий",
+                system_title: "Общее состояние системы",
+                status_label: "Состояние:",
+                temp_label: "Температура:",
+                trains_passed_label: "Пройденные поезда:", // Updated
+                system_status_label: "Состояние системы:",
+                last_check_label: "Последняя проверка:",
+                uptime_label: "Время работы:",
+                loading: "Загрузка...",
+                status: {
+                    normal: "Нормально",
+                    stabil: "Стабильно",
+                    warning: "Предупреждение",
+                    alarm: "Тревога"
+                },
+                logs: {
+                    connected: "Связь восстановлена",
+                    disconnected: "Связь потеряна",
+                    sensor_updated: "Датчик обновлен",
+                    temp_rise: "Обнаружено повышение температуры",
+                    balance_issue: "Нарушение баланса",
+                    device_restarted: "Устройство перезагружено"
+                },
+                units: {
+                    temp: "°C",
+                    passed: "шт.", // Kept as is, as it fits for "trains"
+                    uptime: "часов"
+                }
+            },
+            en: {
+                title: "TrainSafe - Diagnostics",
+                back_btn: "Back",
+                diagnostics_title: "Diagnostics Status",
+                left_device_title: "Left Rail Device",
+                right_device_title: "Right Rail Device",
+                left_log_title: "Event Log",
+                right_log_title: "Event Log",
+                system_title: "Overall System Status",
+                status_label: "Status:",
+                temp_label: "Temperature:",
+                trains_passed_label: "Trains Passed:", // Updated
+                system_status_label: "System Status:",
+                last_check_label: "Last Check:",
+                uptime_label: "Uptime:",
+                loading: "Loading...",
+                status: {
+                    normal: "Normal",
+                    stabil: "Stable",
+                    warning: "Warning",
+                    alarm: "Alarm"
+                },
+                logs: {
+                    connected: "Connection Restored",
+                    disconnected: "Connection Lost",
+                    sensor_updated: "Sensor Updated",
+                    temp_rise: "Temperature Rise Detected",
+                    balance_issue: "Balance Issue",
+                    device_restarted: "Device Restarted"
+                },
+                units: {
+                    temp: "°C",
+                    passed: "units", // Kept as is, as it fits for "trains"
+                    uptime: "hours"
+                }
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'uz';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.getElementById('back-btn').textContent = translations[lang].back_btn;
+            document.getElementById('diagnostics-title').textContent = translations[lang].diagnostics_title;
+            document.getElementById('left-device-title').textContent = translations[lang].left_device_title;
+            document.getElementById('right-device-title').textContent = translations[lang].right_device_title;
+            document.getElementById('left-log-title').textContent = translations[lang].left_log_title;
+            document.getElementById('right-log-title').textContent = translations[lang].right_log_title;
+            document.getElementById('system-title').textContent = translations[lang].system_title;
+            initializeDiagnosticsPage();
+        }
+
+        function initializeDiagnosticsPage() {
+            const currentDate = new Date().toLocaleDateString(currentLang === 'uz' ? 'uz-UZ' : currentLang === 'ru' ? 'ru-RU' : 'en-US', {
+                timeZone: 'Asia/Tashkent'
+            });
+            const currentTime = new Date().toLocaleTimeString(currentLang === 'uz' ? 'uz-UZ' : currentLang === 'ru' ? 'ru-RU' : 'en-US', {
+                timeZone: 'Asia/Tashkent'
+            });
+
+            const mockData = {
+                left: {
+                    status: translations[currentLang].status.normal,
+                    temp: 42,
+                    passed: 12,
+                    logs: [{
+                        date: currentDate,
+                        time: '08:24:00',
+                        event: translations[currentLang].logs.connected,
+                        icon: '✅'
+                    }, {
+                        date: currentDate,
+                        time: '08:00:00',
+                        event: translations[currentLang].logs.disconnected,
+                        icon: '❌'
+                    }, {
+                        date: currentDate,
+                        time: '07:30:00',
+                        event: translations[currentLang].logs.sensor_updated,
+                        icon: '🔄'
+                    }, {
+                        date: currentDate,
+                        time: '06:45:00',
+                        event: translations[currentLang].logs.temp_rise,
+                        icon: '⚠️'
+                    }]
+                },
+                right: {
+                    status: translations[currentLang].status.warning,
+                    temp: 65,
+                    passed: 15,
+                    logs: [{
+                        date: currentDate,
+                        time: '08:20:00',
+                        event: translations[currentLang].logs.connected,
+                        icon: '✅'
+                    }, {
+                        date: currentDate,
+                        time: '07:50:00',
+                        event: translations[currentLang].logs.disconnected,
+                        icon: '❌'
+                    }, {
+                        date: currentDate,
+                        time: '07:15:00',
+                        event: translations[currentLang].logs.balance_issue,
+                        icon: '⚖️'
+                    }, {
+                        date: currentDate,
+                        time: '06:30:00',
+                        event: translations[currentLang].logs.device_restarted,
+                        icon: '🔄'
+                    }]
+                },
+                system: {
+                    status: translations[currentLang].status.stabil,
+                    lastCheck: `${currentDate} ${currentTime}`,
+                    uptime: `48 ${translations[currentLang].units.uptime}`
+                }
+            };
+
+            document.getElementById('leftStatus').innerHTML = `${translations[currentLang].status_label} <strong class="status-badge ${getStatusClass(mockData.left.status)}">${mockData.left.status}</strong>`;
+            document.getElementById('leftTemp').innerHTML = `${translations[currentLang].temp_label} <strong>${mockData.left.temp}${translations[currentLang].units.temp}</strong>`;
+            document.getElementById('leftPassed').innerHTML = `${translations[currentLang].trains_passed_label} <strong>${mockData.left.passed} ${translations[currentLang].units.passed}</strong>`; // Updated
+
+            const leftLog = document.getElementById('leftLog');
+            leftLog.innerHTML = '';
+            mockData.left.logs.forEach(log => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex align-items-center';
+                li.innerHTML = `<span class="log-icon">${log.icon}</span> ${log.event} - ${log.date} ${log.time}`;
+                leftLog.appendChild(li);
+            });
+
+            document.getElementById('rightStatus').innerHTML = `${translations[currentLang].status_label} <strong class="status-badge ${getStatusClass(mockData.right.status)}">${mockData.right.status}</strong>`;
+            document.getElementById('rightTemp').innerHTML = `${translations[currentLang].temp_label} <strong>${mockData.right.temp}${translations[currentLang].units.temp}</strong>`;
+            document.getElementById('rightPassed').innerHTML = `${translations[currentLang].trains_passed_label} <strong>${mockData.right.passed} ${translations[currentLang].units.passed}</strong>`; // Updated
+
+            const rightLog = document.getElementById('rightLog');
+            rightLog.innerHTML = '';
+            mockData.right.logs.forEach(log => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex align-items-center';
+                li.innerHTML = `<span class="log-icon">${log.icon}</span> ${log.event} - ${log.date} ${log.time}`;
+                rightLog.appendChild(li);
+            });
+
+            document.getElementById('systemStatus').innerHTML = `${translations[currentLang].system_status_label} <strong class="status-badge ${getStatusClass(mockData.system.status)}">${mockData.system.status}</strong>`;
+            document.getElementById('lastCheck').innerHTML = `${translations[currentLang].last_check_label} <strong>${mockData.system.lastCheck}</strong>`;
+            document.getElementById('uptime').innerHTML = `${translations[currentLang].uptime_label} <strong>${mockData.system.uptime}</strong>`;
+        }
+
+        function getStatusClass(status) {
+            if (status === translations[currentLang].status.normal || status === translations[currentLang].status.stabil) return 'normal';
+            if (status === translations[currentLang].status.warning) return 'warning';
+            return 'alarm';
+        }
+
+        function initializePage() {
+            setLanguage(currentLang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>

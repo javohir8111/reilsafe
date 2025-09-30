@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainSafe - Profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #60d1decb;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .back-btn {
+            margin: 15px;
+            border: 1px solid #6c757d;
+            background: transparent;
+            color: #6c757d;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .back-btn:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h5 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+        
+        .stat-card p {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .btn-action {
+            margin: 10px 5px;
+        }
+        
+        .card {
+            margin-bottom: 20px;
+        }
+        
+        .list-group-item i {
+            margin-right: 10px;
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 5px;
+            background: url('assets/lang-bg.png') no-repeat center/cover;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/railsafe.png" alt="TrainSafe Logo" class="logo">
+            <img src="assets/iconr.png" alt="Partner Logo 1" class="logo">
+            <img src="assets/tstu.png" alt="Partner Logo 2" class="logo">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="uz">UZB</button>
+                <button class="lang-btn" data-lang="ru">RUS</button>
+                <button class="lang-btn" data-lang="en">ENG</button>
+            </div>
+            <a href="profil.html" class="text-white text-decoration-none ms-3"><span class="user-icon">👤</span> <span id="username">IRGASHEV N.N</span></a>
+            <a href="note.html" class="text-white ms-4 fs-4 text-decoration-none">🔔</a>
+        </div>
+    </header>
+
+    <button class="back-btn" onclick="window.location='index.html'" aria-label="Back" id="back-btn">
+        <i class="fas fa-arrow-left"></i> Orqaga
+    </button>
+
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-header" id="personal-info-header">Shaxsiy ma'lumotlar</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fas fa-user"></i> <span id="profile-name">Irgashev</span></li>
+                    <li class="list-group-item"><i class="fas fa-briefcase"></i> <span id="profile-role">Tarmoq administratori</span></li>
+                    <li class="list-group-item"><i class="fas fa-building"></i> <span id="profile-department">Texnik bo'lim</span></li>
+                    <li class="list-group-item"><i class="fas fa-phone"></i> <span id="profile-phone">+998 90 123 45 67</span></li>
+                    <li class="list-group-item"><i class="fas fa-envelope"></i> <span id="profile-email">irgashev@example.com</span></li>
+                    <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <span id="profile-join-date">2020-yil, 15-yanvar</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="permissions-header">Tizim huquqlari</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fas fa-eye"></i> <span id="perm-view-stations">Stansiyalarni ko'rish</span></li>
+                    <li class="list-group-item"><i class="fas fa-bell"></i> <span id="perm-manage-alerts">Ogohlantirishlarni boshqarish</span></li>
+                    <li class="list-group-item"><i class="fas fa-file-export"></i> <span id="perm-export-reports">Hisobotlarni eksport qilish</span></li>
+                    <li class="list-group-item"><i class="fas fa-cog"></i> <span id="perm-edit-settings">Sozlamalarni o'zgartirish</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="stats-header">Faoliyat statistikasi</div>
+            <div class="card-body">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h5>1,247</h5>
+                        <p id="stats-checked-stations">Tekshirilgan stansiyalar</p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>89</h5>
+                        <p id="stats-resolved-issues">Hal qilingan muammolar</p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>156</h5>
+                        <p id="stats-generated-reports">Yaratilgan hisobotlar</p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>99.2%</h5>
+                        <p id="stats-system-efficiency">Tizim samaradorligi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="settings-header">Tizim sozlamalari</div>
+            <div class="card-body">
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                    <label class="form-check-label" for="emailNotifications" id="settings-email-notifications">Email bildirishnomalar</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="smsNotifications">
+                    <label class="form-check-label" for="smsNotifications" id="settings-sms-notifications">SMS ogohlantirishlar</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="autoReports">
+                    <label class="form-check-label" for="autoReports" id="settings-auto-reports">Avtomatik hisobotlar</label>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-action" data-bs-toggle="modal" data-bs-target="#editProfileModal" aria-label="Edit Profile" id="edit-profile-btn">
+            <i class="fas fa-edit"></i> Ma'lumotlarni tahrirlash
+        </button>
+        <button class="btn btn-warning btn-action" data-bs-toggle="modal" data-bs-target="#changePasswordModal" aria-label="Change Password" id="change-password-btn">
+            <i class="fas fa-lock"></i> Parolni o'zgartirish
+        </button>
+        <button class="btn btn-danger btn-action" onclick="window.location='login.html'" aria-label="Logout" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Chiqish
+        </button>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Ma'lumotlarni tahrirlash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="edit-modal-close-btn"></button>
+                </div>
+                <div class="modal-body" id="edit-modal-body">
+                    Ma'lumotlarni tahrirlash funksiyasi keyinroq qo'shiladi.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-modal-close">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Parolni o'zgartirish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="password-modal-close-btn"></button>
+                </div>
+                <div class="modal-body" id="password-modal-body">
+                    Parolni o'zgartirish funksiyasi keyinroq qo'shiladi.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="password-modal-close">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const translations = {
+            uz: {
+                title: "TrainSafe - Profil",
+                back_btn: "Orqaga",
+                back_btn_aria: "Orqaga qaytish",
+                personal_info_header: "Shaxsiy ma'lumotlar",
+                profile_name: "Irgashev",
+                profile_role: "Tarmoq administratori",
+                profile_department: "Texnik bo'lim",
+                profile_phone: "+998 90 123 45 67",
+                profile_email: "irgashev@example.com",
+                profile_join_date: "2020-yil, 15-yanvar",
+                permissions_header: "Tizim huquqlari",
+                perm_view_stations: "Stansiyalarni ko'rish",
+                perm_manage_alerts: "Ogohlantirishlarni boshqarish",
+                perm_export_reports: "Hisobotlarni eksport qilish",
+                perm_edit_settings: "Sozlamalarni o'zgartirish",
+                stats_header: "Faoliyat statistikasi",
+                stats_checked_stations: "Tekshirilgan stansiyalar",
+                stats_resolved_issues: "Hal qilingan muammolar",
+                stats_generated_reports: "Yaratilgan hisobotlar",
+                stats_system_efficiency: "Tizim samaradorligi",
+                settings_header: "Tizim sozlamalari",
+                settings_email_notifications: "Email bildirishnomalar",
+                settings_sms_notifications: "SMS ogohlantirishlar",
+                settings_auto_reports: "Avtomatik hisobotlar",
+                edit_profile_btn: "Ma'lumotlarni tahrirlash",
+                edit_profile_aria: "Ma'lumotlarni tahrirlash",
+                change_password_btn: "Parolni o'zgartirish",
+                change_password_aria: "Parolni o'zgartirish",
+                logout_btn: "Chiqish",
+                logout_aria: "Tizimdan chiqish",
+                edit_modal_title: "Ma'lumotlarni tahrirlash",
+                edit_modal_body: "Ma'lumotlarni tahrirlash funksiyasi keyinroq qo'shiladi.",
+                edit_modal_close: "Yopish",
+                edit_modal_close_aria: "Yopish",
+                password_modal_title: "Parolni o'zgartirish",
+                password_modal_body: "Parolni o'zgartirish funksiyasi keyinroq qo'shiladi.",
+                password_modal_close: "Yopish",
+                password_modal_close_aria: "Yopish"
+            },
+            ru: {
+                title: "TrainSafe - Профиль",
+                back_btn: "Назад",
+                back_btn_aria: "Вернуться назад",
+                personal_info_header: "Личные данные",
+                profile_name: "Иргашев",
+                profile_role: "Сетевой администратор",
+                profile_department: "Технический отдел",
+                profile_phone: "+998 90 123 45 67",
+                profile_email: "irgashev@example.com",
+                profile_join_date: "15 января 2020 года",
+                permissions_header: "Права в системе",
+                perm_view_stations: "Просмотр станций",
+                perm_manage_alerts: "Управление уведомлениями",
+                perm_export_reports: "Экспорт отчетов",
+                perm_edit_settings: "Изменение настроек",
+                stats_header: "Статистика деятельности",
+                stats_checked_stations: "Проверенные станции",
+                stats_resolved_issues: "Решенные проблемы",
+                stats_generated_reports: "Созданные отчеты",
+                stats_system_efficiency: "Эффективность системы",
+                settings_header: "Настройки системы",
+                settings_email_notifications: "Уведомления по email",
+                settings_sms_notifications: "SMS-уведомления",
+                settings_auto_reports: "Автоматические отчеты",
+                edit_profile_btn: "Редактировать данные",
+                edit_profile_aria: "Редактировать профиль",
+                change_password_btn: "Сменить пароль",
+                change_password_aria: "Сменить пароль",
+                logout_btn: "Выход",
+                logout_aria: "Выйти из системы",
+                edit_modal_title: "Редактировать данные",
+                edit_modal_body: "Функция редактирования данных будет добавлена позже.",
+                edit_modal_close: "Закрыть",
+                edit_modal_close_aria: "Закрыть",
+                password_modal_title: "Сменить пароль",
+                password_modal_body: "Функция смены пароля будет добавлена позже.",
+                password_modal_close: "Закрыть",
+                password_modal_close_aria: "Закрыть"
+            },
+            en: {
+                title: "TrainSafe - Profile",
+                back_btn: "Back",
+                back_btn_aria: "Go back",
+                personal_info_header: "Personal Information",
+                profile_name: "Irgashev",
+                profile_role: "Network Administrator",
+                profile_department: "Technical Department",
+                profile_phone: "+998 90 123 45 67",
+                profile_email: "irgashev@example.com",
+                profile_join_date: "January 15, 2020",
+                permissions_header: "System Permissions",
+                perm_view_stations: "View Stations",
+                perm_manage_alerts: "Manage Alerts",
+                perm_export_reports: "Export Reports",
+                perm_edit_settings: "Edit Settings",
+                stats_header: "Activity Statistics",
+                stats_checked_stations: "Checked Stations",
+                stats_resolved_issues: "Resolved Issues",
+                stats_generated_reports: "Generated Reports",
+                stats_system_efficiency: "System Efficiency",
+                settings_header: "System Settings",
+                settings_email_notifications: "Email Notifications",
+                settings_sms_notifications: "SMS Notifications",
+                settings_auto_reports: "Automatic Reports",
+                edit_profile_btn: "Edit Profile",
+                edit_profile_aria: "Edit Profile",
+                change_password_btn: "Change Password",
+                change_password_aria: "Change Password",
+                logout_btn: "Logout",
+                logout_aria: "Log out of the system",
+                edit_modal_title: "Edit Profile",
+                edit_modal_body: "Profile editing function will be added later.",
+                edit_modal_close: "Close",
+                edit_modal_close_aria: "Close",
+                password_modal_title: "Change Password",
+                password_modal_body: "Password change function will be added later.",
+                password_modal_close: "Close",
+                password_modal_close_aria: "Close"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'uz';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.getElementById('back-btn').innerHTML = `<i class="fas fa-arrow-left"></i> ${translations[lang].back_btn}`;
+            document.getElementById('back-btn').setAttribute('aria-label', translations[lang].back_btn_aria);
+            document.getElementById('personal-info-header').textContent = translations[lang].personal_info_header;
+            document.getElementById('profile-name').textContent = translations[lang].profile_name;
+            document.getElementById('profile-role').textContent = translations[lang].profile_role;
+            document.getElementById('profile-department').textContent = translations[lang].profile_department;
+            document.getElementById('profile-phone').textContent = translations[lang].profile_phone;
+            document.getElementById('profile-email').textContent = translations[lang].profile_email;
+            document.getElementById('profile-join-date').textContent = translations[lang].profile_join_date;
+            document.getElementById('permissions-header').textContent = translations[lang].permissions_header;
+            document.getElementById('perm-view-stations').textContent = translations[lang].perm_view_stations;
+            document.getElementById('perm-manage-alerts').textContent = translations[lang].perm_manage_alerts;
+            document.getElementById('perm-export-reports').textContent = translations[lang].perm_export_reports;
+            document.getElementById('perm-edit-settings').textContent = translations[lang].perm_edit_settings;
+            document.getElementById('stats-header').textContent = translations[lang].stats_header;
+            document.getElementById('stats-checked-stations').textContent = translations[lang].stats_checked_stations;
+            document.getElementById('stats-resolved-issues').textContent = translations[lang].stats_resolved_issues;
+            document.getElementById('stats-generated-reports').textContent = translations[lang].stats_generated_reports;
+            document.getElementById('stats-system-efficiency').textContent = translations[lang].stats_system_efficiency;
+            document.getElementById('settings-header').textContent = translations[lang].settings_header;
+            document.getElementById('settings-email-notifications').textContent = translations[lang].settings_email_notifications;
+            document.getElementById('settings-sms-notifications').textContent = translations[lang].settings_sms_notifications;
+            document.getElementById('settings-auto-reports').textContent = translations[lang].settings_auto_reports;
+            document.getElementById('edit-profile-btn').innerHTML = `<i class="fas fa-edit"></i> ${translations[lang].edit_profile_btn}`;
+            document.getElementById('edit-profile-btn').setAttribute('aria-label', translations[lang].edit_profile_aria);
+            document.getElementById('change-password-btn').innerHTML = `<i class="fas fa-lock"></i> ${translations[lang].change_password_btn}`;
+            document.getElementById('change-password-btn').setAttribute('aria-label', translations[lang].change_password_aria);
+            document.getElementById('logout-btn').innerHTML = `<i class="fas fa-sign-out-alt"></i> ${translations[lang].logout_btn}`;
+            document.getElementById('logout-btn').setAttribute('aria-label', translations[lang].logout_aria);
+            document.getElementById('editProfileModalLabel').textContent = translations[lang].edit_modal_title;
+            document.getElementById('edit-modal-body').textContent = translations[lang].edit_modal_body;
+            document.getElementById('edit-modal-close').textContent = translations[lang].edit_modal_close;
+            document.getElementById('edit-modal-close-btn').setAttribute('aria-label', translations[lang].edit_modal_close_aria);
+            document.getElementById('changePasswordModalLabel').textContent = translations[lang].password_modal_title;
+            document.getElementById('password-modal-body').textContent = translations[lang].password_modal_body;
+            document.getElementById('password-modal-close').textContent = translations[lang].password_modal_close;
+            document.getElementById('password-modal-close-btn').setAttribute('aria-label', translations[lang].password_modal_close_aria);
+        }
+
+        function initializePage() {
+            setLanguage(currentLang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>

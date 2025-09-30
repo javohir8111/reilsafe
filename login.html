@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailSafe - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #001a3d 0%, #00a8a8 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            width: 100%;
+            padding: 2.5rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .partner-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .partner-logos {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .partner-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo-partner {
+            height: 100px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+        
+        .logo-partner:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+        }
+        
+        .logo-label {
+            font-size: 1.1rem;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            animation: slideUp 1.2s ease-out;
+            backdrop-filter: blur(10px);
+            margin: 4rem auto;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #003366 0%, #00a8a8 100%);
+            border: none;
+            padding: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-control {
+            border-radius: 0.5rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #00a8a8;
+            box-shadow: 0 0 0 0.25rem rgba(0, 168, 168, 0.3);
+        }
+        
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header qismi -->
+    <header class="header">
+        <div class="partner-section">
+            <div class="partner-logos">
+                <div class="partner-logo-container">
+                    <img src="assets/iconr.png" alt="O'zbekiston Temir Yo'llari" class="logo-partner">
+                    <div class="logo-label">O'zbekiston Temir Yo'llari</div>
+                </div>
+                <div class="partner-logo-container">
+                    <img src="assets/tstu.png" alt="Toshkent Davlat Transport Universiteti" class="logo-partner">
+                    <div class="logo-label">Toshkent Davlat Transport Universiteti</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login form qismi -->
+    <div class="container d-flex justify-content-center">
+        <div class="login-container">
+            <!-- RailSafe logotipi markazda -->
+            <div class="d-flex justify-content-center mb-4">
+                <img src="assets/railsafe.png" alt="RailSafe Logo" style="height: 150px; max-width: 100%; object-fit: contain;">
+            </div>
+
+            <form action="index.html" method="post" class="mt-4">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="username" placeholder="Loginni kiriting" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Parol</label>
+                    <input type="password" class="form-control" id="password" placeholder="Parolni kiriting" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Kirish</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

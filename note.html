@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainSafe - Trivogalar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #60d1decb;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .back-btn {
+            margin: 15px;
+            border: 1px solid #6c757d;
+            background: transparent;
+            color: #6c757d;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .back-btn:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .alert.normal {
+            border-left: 5px solid #198754;
+        }
+        
+        .alert.warning {
+            border-left: 5px solid #ffc107;
+        }
+        
+        .alert.alarm {
+            border-left: 5px solid #dc3545;
+        }
+        
+        .list-group-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .search-box {
+            margin: 15px 0;
+            max-width: 400px;
+        }
+        
+        .filter-box {
+            margin: 15px 0;
+            max-width: 200px;
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 5px;
+            background: url('assets/lang-bg.png') no-repeat center/cover;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/railsafe.png" alt="TrainSafe Logo" class="logo">
+            <img src="assets/iconr.png" alt="Partner Logo 1" class="logo">
+            <img src="assets/tstu.png" alt="Partner Logo 2" class="logo">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="uz">UZB</button>
+                <button class="lang-btn" data-lang="ru">RUS</button>
+                <button class="lang-btn" data-lang="en">ENG</button>
+            </div>
+            <a href="profil.html" class="text-white text-decoration-none ms-3"><span class="user-icon">👤</span> <span id="username">IRGASHEV N.N</span></a>
+            <a href="note.html" class="text-white ms-4 fs-4 text-decoration-none">🔔</a>
+        </div>
+    </header>
+
+    <div class="container mt-3">
+        <button class="back-btn" onclick="window.location='index.html'" aria-label="Back">Orqaga</button>
+        <h2 id="alerts-title">Trivogalar</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="search-box">
+                <input type="text" class="form-control" id="searchInput" placeholder="Stansiya yoki poyezd ID bo'yicha qidirish" aria-label="Search alerts">
+            </div>
+            <div class="filter-box">
+                <select class="form-select" id="statusFilter" aria-label="Filter by alert status">
+                    <option value="all">Barchasi</option>
+                    <option value="normal">Normal</option>
+                    <option value="warning">TRIVOGA-1</option>
+                    <option value="alarm">TRIVOGA-2</option>
+                </select>
+            </div>
+        </div>
+        <ul class="list-group" id="alertList" aria-label="Alerts list"></ul>
+    </div>
+
+    <div class="modal fade" id="alertDetailsModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alertModalLabel">Trivoga tafsilotlari</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong id="modal-station-label">Stansiya:</strong> <span id="modalStation"></span></p>
+                    <p><strong id="modal-trainid-label">Poyezd ID:</strong> <span id="modalTrainId"></span></p>
+                    <p><strong id="modal-temp-label">Harorat:</strong> <span id="modalTemp"></span></p>
+                    <p><strong id="modal-status-label">Holati:</strong> <span id="modalStatus"></span></p>
+                    <p><strong id="modal-time-label">Vaqt:</strong> <span id="modalTime"></span></p>
+                    <p><strong id="modal-description-label">Tavsif:</strong> <span id="modalDescription"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close-btn">Yopish</button>
+                    <button type="button" class="btn btn-primary" onclick="alert('Tekshirish keyinroq qo\'shiladi')" id="modal-check-btn">Tekshirish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const translations = {
+            uz: {
+                title: "TrainSafe - Trivogalar",
+                back_btn: "Orqaga",
+                alerts_title: "Trivogalar",
+                search_placeholder: "Stansiya yoki poyezd ID bo'yicha qidirish",
+                search_aria: "Trivogalar bo'yicha qidirish",
+                filter_aria: "Trivoga holati bo'yicha filtr",
+                filter_all: "Barchasi",
+                filter_normal: "Normal",
+                filter_warning: "TRIVOGA-1",
+                filter_alarm: "TRIVOGA-2",
+                alert_list_aria: "Trivogalar ro'yxati",
+                modal_title: "Trivoga tafsilotlari",
+                modal_station_label: "Stansiya:",
+                modal_trainid_label: "Poyezd ID:",
+                modal_temp_label: "Harorat:",
+                modal_status_label: "Holati:",
+                modal_time_label: "Vaqt:",
+                modal_description_label: "Tavsif:",
+                modal_close_btn: "Yopish",
+                modal_check_btn: "Tekshirish",
+                alert_desc_1: "Relis harorati yuqori, darhol tekshirish talab qilinadi",
+                alert_desc_2: "Relis harorati o'rtacha yuqori, e'tibor talab qilinadi",
+                alert_desc_3: "Barcha parametrlar normal",
+                alert_desc_4: "Yuqori harorat aniqlandi, sensor #2",
+                alert_desc_5: "Tizim normal ishlamoqda",
+                new_alert_desc: "Yangi trivoga qo'shildi (avtomatik yangilanish)",
+                check_alert: "Tekshirish keyinroq qo'shiladi"
+            },
+            ru: {
+                title: "TrainSafe - Тревоги",
+                back_btn: "Назад",
+                alerts_title: "Тревоги",
+                search_placeholder: "Поиск по станции или ID поезда",
+                search_aria: "Поиск по тревогам",
+                filter_aria: "Фильтр по статусу тревоги",
+                filter_all: "Все",
+                filter_normal: "Нормально",
+                filter_warning: "ТРЕВОГА-1",
+                filter_alarm: "ТРЕВОГА-2",
+                alert_list_aria: "Список тревог",
+                modal_title: "Детали тревоги",
+                modal_station_label: "Станция:",
+                modal_trainid_label: "ID поезда:",
+                modal_temp_label: "Температура:",
+                modal_status_label: "Статус:",
+                modal_time_label: "Время:",
+                modal_description_label: "Описание:",
+                modal_close_btn: "Закрыть",
+                modal_check_btn: "Проверить",
+                alert_desc_1: "Высокая температура рельса, требуется немедленная проверка",
+                alert_desc_2: "Температура рельса умеренно высокая, требуется внимание",
+                alert_desc_3: "Все параметры в норме",
+                alert_desc_4: "Обнаружена высокая температура, датчик #2",
+                alert_desc_5: "Система работает нормально",
+                new_alert_desc: "Добавлена новая тревога (автоматическое обновление)",
+                check_alert: "Проверка будет добавлена позже"
+            },
+            en: {
+                title: "TrainSafe - Alerts",
+                back_btn: "Back",
+                alerts_title: "Alerts",
+                search_placeholder: "Search by station or train ID",
+                search_aria: "Search alerts",
+                filter_aria: "Filter by alert status",
+                filter_all: "All",
+                filter_normal: "Normal",
+                filter_warning: "ALERT-1",
+                filter_alarm: "ALERT-2",
+                alert_list_aria: "Alerts list",
+                modal_title: "Alert Details",
+                modal_station_label: "Station:",
+                modal_trainid_label: "Train ID:",
+                modal_temp_label: "Temperature:",
+                modal_status_label: "Status:",
+                modal_time_label: "Time:",
+                modal_description_label: "Description:",
+                modal_close_btn: "Close",
+                modal_check_btn: "Check",
+                alert_desc_1: "High rail temperature, immediate inspection required",
+                alert_desc_2: "Moderately high rail temperature, attention required",
+                alert_desc_3: "All parameters normal",
+                alert_desc_4: "High temperature detected, sensor #2",
+                alert_desc_5: "System operating normally",
+                new_alert_desc: "New alert added (automatic update)",
+                check_alert: "Check will be added later"
+            }
+        };
+
+        let currentLang = 'uz';
+
+        const alerts = [{
+            id: 1,
+            station: 'Nurbulak',
+            trainId: 'Freight-4925',
+            temp: 92,
+            status: 'TRIVOGA-2',
+            status_en: 'ALERT-2',
+            status_ru: 'ТРЕВОГА-2',
+            time: '2025-09-30 08:15:00',
+            description: 'alert_desc_1'
+        }, {
+            id: 2,
+            station: 'Kattakurgan',
+            trainId: 'Freight-3552',
+            temp: 65,
+            status: 'TRIVOGA-1',
+            status_en: 'ALERT-1',
+            status_ru: 'ТРЕВОГА-1',
+            time: '2025-09-30 08:00:00',
+            description: 'alert_desc_2'
+        }, {
+            id: 3,
+            station: 'Yangiyul',
+            trainId: 'Freight-3950',
+            temp: 40,
+            status: 'Normal',
+            status_en: 'Normal',
+            status_ru: 'Нормально',
+            time: '2025-09-30 07:45:00',
+            description: 'alert_desc_3'
+        }, {
+            id: 4,
+            station: 'Samarkand',
+            trainId: 'Freight-4611',
+            temp: 88,
+            status: 'TRIVOGA-2',
+            status_en: 'ALERT-2',
+            status_ru: 'ТРЕВОГА-2',
+            time: '2025-09-30 07:30:00',
+            description: 'alert_desc_4'
+        }, {
+            id: 5,
+            station: 'Tashkent',
+            trainId: 'Freight-1797',
+            temp: 42,
+            status: 'Normal',
+            status_en: 'Normal',
+            status_ru: 'Нормально',
+            time: '2025-09-30 07:15:00',
+            description: 'alert_desc_5'
+        }];
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.querySelector('.back-btn').textContent = translations[lang].back_btn;
+            document.querySelector('.back-btn').setAttribute('aria-label', translations[lang].back_btn);
+            document.querySelector('#alerts-title').textContent = translations[lang].alerts_title;
+            document.querySelector('#searchInput').placeholder = translations[lang].search_placeholder;
+            document.querySelector('#searchInput').setAttribute('aria-label', translations[lang].search_aria);
+            document.querySelector('#statusFilter').setAttribute('aria-label', translations[lang].filter_aria);
+            document.querySelector('#alertList').setAttribute('aria-label', translations[lang].alert_list_aria);
+            document.querySelector('#alertModalLabel').textContent = translations[lang].modal_title;
+            document.querySelector('#modal-station-label').textContent = translations[lang].modal_station_label;
+            document.querySelector('#modal-trainid-label').textContent = translations[lang].modal_trainid_label;
+            document.querySelector('#modal-temp-label').textContent = translations[lang].modal_temp_label;
+            document.querySelector('#modal-status-label').textContent = translations[lang].modal_status_label;
+            document.querySelector('#modal-time-label').textContent = translations[lang].modal_time_label;
+            document.querySelector('#modal-description-label').textContent = translations[lang].modal_description_label;
+            document.querySelector('#modal-close-btn').textContent = translations[lang].modal_close_btn;
+            document.querySelector('#modal-check-btn').setAttribute('onclick', `alert('${translations[lang].check_alert}')`);
+            const statusFilter = document.querySelector('#statusFilter');
+            statusFilter.innerHTML = `
+                <option value="all">${translations[lang].filter_all}</option>
+                <option value="normal">${translations[lang].filter_normal}</option>
+                <option value="warning">${translations[lang].filter_warning}</option>
+                <option value="alarm">${translations[lang].filter_alarm}</option>
+            `;
+            renderAlerts(statusFilter.value, document.querySelector('#searchInput').value);
+        }
+
+        function renderAlerts(filter = 'all', search = '') {
+            const alertList = document.getElementById('alertList');
+            alertList.innerHTML = '';
+
+            const filteredAlerts = alerts.filter(alert => {
+                const matchesStatus = filter === 'all' || (
+                    filter === 'normal' && alert.status === 'Normal' ||
+                    filter === 'warning' && (alert.status === 'TRIVOGA-1' || alert.status === 'ALERT-1' || alert.status === 'ТРЕВОГА-1') ||
+                    filter === 'alarm' && (alert.status === 'TRIVOGA-2' || alert.status === 'ALERT-2' || alert.status === 'ТРЕВОГА-2')
+                );
+                const matchesSearch = search === '' ||
+                    alert.station.toLowerCase().includes(search.toLowerCase()) ||
+                    alert.trainId.toLowerCase().includes(search.toLowerCase());
+                return matchesStatus && matchesSearch;
+            });
+
+            filteredAlerts.forEach(alert => {
+                const statusClass = alert.status === 'Normal' ? 'normal' : (alert.status === 'TRIVOGA-1' || alert.status === 'ALERT-1' || alert.status === 'ТРЕВОГА-1') ? 'warning' : 'alarm';
+                const li = document.createElement('li');
+                li.className = `list-group-item alert ${statusClass}`;
+                const statusText = currentLang === 'uz' ? alert.status : currentLang === 'ru' ? alert.status_ru : alert.status_en;
+                li.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${statusText}</strong>: ${alert.station} - ${alert.trainId} (${alert.temp}°C)
+                            <br><small>${alert.time}</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" data-alert-id="${alert.id}" aria-label="${alert.station} uchun trivoga tafsilotlari">${translations[currentLang].modal_check_btn}</button>
+                    </div>
+                `;
+                alertList.appendChild(li);
+            });
+
+            document.querySelectorAll('#alertList button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const alertId = button.getAttribute('data-alert-id');
+                    const alert = alerts.find(a => a.id === parseInt(alertId));
+                    if (alert) showAlertDetails(alert);
+                });
+            });
+        }
+
+        function showAlertDetails(alert) {
+            document.getElementById('modalStation').textContent = alert.station;
+            document.getElementById('modalTrainId').textContent = alert.trainId;
+            document.getElementById('modalTemp').textContent = `${alert.temp}°C`;
+            document.getElementById('modalStatus').textContent = currentLang === 'uz' ? alert.status : currentLang === 'ru' ? alert.status_ru : alert.status_en;
+            document.getElementById('modalTime').textContent = alert.time;
+            document.getElementById('modalDescription').textContent = translations[currentLang][alert.description];
+            new bootstrap.Modal(document.getElementById('alertDetailsModal')).show();
+        }
+
+        function initializeAlertsPage() {
+            setLanguage('uz');
+            renderAlerts();
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const filter = document.getElementById('statusFilter').value;
+                renderAlerts(filter, e.target.value);
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', (e) => {
+                const search = document.getElementById('searchInput').value;
+                renderAlerts(e.target.value, search);
+            });
+
+            setInterval(() => {
+                const newAlert = {
+                    id: alerts.length + 1,
+                    station: ['Tashkent', 'Samarkand', 'Nurbulak', 'Kattakurgan', 'Yangiyul'][Math.floor(Math.random() * 5)],
+                    trainId: `Freight-${Math.floor(1000 + Math.random() * 9000)}`,
+                    temp: Math.floor(30 + Math.random() * 70),
+                    status: Math.random() < 0.2 ? 'Normal' : Math.random() < 0.5 ? 'TRIVOGA-1' : 'TRIVOGA-2',
+                    status_en: Math.random() < 0.2 ? 'Normal' : Math.random() < 0.5 ? 'ALERT-1' : 'ALERT-2',
+                    status_ru: Math.random() < 0.2 ? 'Нормально' : Math.random() < 0.5 ? 'ТРЕВОГА-1' : 'ТРЕВОГА-2',
+                    time: new Date().toLocaleString('uz-UZ', {
+                        timeZone: 'Asia/Tashkent'
+                    }),
+                    description: 'new_alert_desc'
+                };
+                alerts.unshift(newAlert);
+                renderAlerts(document.getElementById('statusFilter').value, document.getElementById('searchInput').value);
+            }, 30000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeAlertsPage);
+    </script>
+</body>
+
+</html>

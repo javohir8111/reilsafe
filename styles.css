@@ -1,0 +1,218 @@
+/* ==== GLOBAL ==== */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #ececec);
+    color: #2c2c2c;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    transition: background 0.3s ease;
+}
+
+
+/* ==== HEADER ==== */
+
+.header {
+    background: linear-gradient(90deg, #1a1a1a, #333);
+    color: #fdfdfd;
+    padding: 14px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    height: 50px;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.logo:hover {
+    transform: rotate(-5deg) scale(1.15);
+    filter: drop-shadow(0px 0px 8px #d4af37);
+}
+
+.profile-link,
+.note-link {
+    color: #fdfdfd;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 30px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.profile-link::after,
+.note-link::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: -4px;
+    background: #d4af37;
+    transition: width 0.3s ease;
+}
+
+.profile-link:hover,
+.note-link:hover {
+    color: #d4af37;
+}
+
+.profile-link:hover::after,
+.note-link:hover::after {
+    width: 100%;
+}
+
+
+/* ==== BUTTONS ==== */
+
+.back-btn {
+    background: linear-gradient(135deg, #2c2c2c, #444);
+    color: white;
+    border: 2px solid #d4af37;
+    padding: 12px 20px;
+    margin: 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn:hover {
+    background: #d4af37;
+    color: #1e1e1e;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ==== STATUS COLORS ==== */
+
+.alarm {
+    color: #e63946;
+    font-weight: bold;
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        text-shadow: 0 0 0px #e63946;
+    }
+    50% {
+        text-shadow: 0 0 12px #e63946;
+    }
+    100% {
+        text-shadow: 0 0 0px #e63946;
+    }
+}
+
+.normal {
+    color: #2a9d8f;
+    font-weight: 600;
+}
+
+.warning {
+    color: #f4a261;
+    font-weight: 700;
+}
+
+
+/* ==== MAP ==== */
+
+.map-container {
+    text-align: center;
+    margin: 30px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+    max-width: 1000px;
+    transition: transform 0.3s ease;
+}
+
+.map-container:hover {
+    transform: translateY(-3px);
+}
+
+#uzbekistan-map {
+    width: 85%;
+    height: auto;
+    max-width: 850px;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+#uzbekistan-map:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0px 0px 10px rgba(42, 157, 143, 0.5));
+}
+
+.station-marker {
+    cursor: pointer;
+    fill: #444;
+    transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.station-marker:hover {
+    fill: #2a9d8f;
+    transform: scale(1.3);
+}
+
+
+/* ==== CHART ==== */
+
+.chart-container {
+    width: 85%;
+    margin: 30px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: scale(1.02);
+}
+
+
+/* ==== TRAIN LIST ==== */
+
+.train-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 850px;
+}
+
+.train-item {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    margin: 14px 0;
+    padding: 16px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.35s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.train-item:hover {
+    background: linear-gradient(135deg, #2a9d8f, #21867a);
+    color: white;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
